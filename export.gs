@@ -1,12 +1,12 @@
-// row番号定義
-var ROW_LANG_INDEX = 2;// 文字列定義行
-var ROW_START_INDEX = 3; // 文字列定義の開始行
+// row
+var ROW_LANG_INDEX = 2;  // language code
+var ROW_START_INDEX = 3; // start index of Strings
 
-// column番号定義
-var COL_FLUTTER_KEY = 0;     // Flutterのkey列
-var COL_ANDOID_KEY = 1;    // Androidのkey列
-var COL_IOS_KEY = 2;       // iOSのkey列
-var COL_PRIMARY_LANG = 4;
+// column
+var COL_FLUTTER_KEY = 0;   // resource key for Flutter
+var COL_ANDOID_KEY = 1;    // resource key for Android
+var COL_IOS_KEY = 2;       // resource key for iOS
+var COL_PRIMARY_LANG = 4;  // 
 
 // メニュー
 var ALL = "All";
@@ -39,13 +39,13 @@ function exportResources(platform) {
   var data = sheet.getDataRange().getValues();
   
   // Folders
-  var appFolder = createOrGetFolder(sheet.getName()); // シート名のフォルダ
+  var appFolder = createOrGetFolder(sheet.getName()); // create root-Folder named by sheet's name
   var folderName = platform;
-  var folder = createOrGetFolder(folderName, appFolder);
+  var folder = createOrGetFolder(folderName, appFolder); // create sub-Folder inside appFolder
 
   var files = [];
-  var length = data[ROW_LANG_INDEX].length;
-  for (var i = 3; i < length; i++) {
+  var langNum = data[ROW_LANG_INDEX].length;
+  for (var i = 3; i < langNum; i++) {
     var lang = data[ROW_LANG_INDEX][i];
     if(platform == ANDROID) {
       createAndroidResources(lang, data, folder, i);
@@ -53,26 +53,20 @@ function exportResources(platform) {
       createIOSResources(lang, data, folder, i);
     } else {
       if (i == COL_PRIMARY_LANG) {
-        // primary言語の出力
+        // primary-language
         var primaryFiles = createFlutterPrimaryResources(data, folder, i);
-        for (var f=0; f<primaryFiles.length; f++) {
+        for (var f = 0; f < primaryFiles.length; f++) {
           files.push(primaryFiles[f]);
         }
       } else {
-        // その他の言語の出力
+        // other language
         files.push(createFlutterResources(lang, data, folder, i));
       }
     }
   }
-  
-  if (platform == ANDROID) {
-    showAndroidExportFinishedMessage();
-  } else if(platform == IOS) {
-    showIOSExportFinishedMessage();
-  } else {
-    var zip = createZip(files, folder);
-    downloadWithHtml(zip.getId());
-  }
+
+  var zip = createZip(files, folder);
+  downloadWithHtml(zip.getId());  
 }
 
 function convertEscapeCharacter(string) {
@@ -83,3 +77,4 @@ function convertEscapeCharacter(string) {
   .replace(new RegExp(">", 'g'), "&gt;")
   .replace(new RegExp("<", 'g'), "&lt;");
 }
+

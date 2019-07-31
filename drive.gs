@@ -6,7 +6,7 @@ function createOrGetFolder(name, folder) {
   } else {
     folders = folder.getFoldersByName(name)
   }
-
+  
   var mainFolder;
   if (folders.hasNext()) {
     mainFolder = folders.next();
@@ -16,8 +16,8 @@ function createOrGetFolder(name, folder) {
      } else {
        mainFolder = folder.createFolder(name);
      }
-  }
-
+  } 
+  
   return mainFolder;
 }
 
@@ -30,7 +30,7 @@ function createOrGetFile(name, folder) {
   } else {
     files = folder.getFilesByName(name)
   }
-
+  
   var file;
   if (files.hasNext()) {
     file = files.next();
@@ -40,7 +40,7 @@ function createOrGetFile(name, folder) {
      } else {
        file = folder.createFile(name, "");
      }
-  }
-
+  } 
+  
   return file;
 }
