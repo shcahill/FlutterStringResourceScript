@@ -47,12 +47,13 @@ function exportResources(platform) {
   var langNum = data[ROW_LANG_INDEX].length;
   for (var i = 3; i < langNum; i++) {
     var lang = data[ROW_LANG_INDEX][i];
+    var isPrimary = (i == COL_PRIMARY_LANG);
     if(platform == ANDROID) {
-      files.push(createAndroidResources(lang, data, folder, i));
+      files.push(createAndroidResources(lang, isPrimary, data, i, folder));
     } else if(platform == IOS) {
-      createIOSResources(lang, data, folder, i);
+      files.push(createIOSResources(lang, data, i, folder));
     } else {
-      if (i == COL_PRIMARY_LANG) {
+      if (isPrimary) {
         // primary-language
         var primaryFiles = createFlutterPrimaryResources(data, i, folder);
         for (var f = 0; f < primaryFiles.length; f++) {

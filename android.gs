@@ -2,11 +2,14 @@
 // Create an XML file for Android
 // language: Current language
 // data:     Spreadsheet data array
-// folder:   Folder where create the file
 // column:   Index of the column
-function createAndroidResources(language, data, folder, column) {
+// folder:   Folder where create the file
+function createAndroidResources(language, isPrimary, data, column, folder) {
 
-  var folderName = "values-" + language;
+  var folderName = "values";
+  if (!isPrimary) {
+    folderName +=  "-" + language;
+  }
   var languageFolder = createOrGetFolder(folderName, folder);
   
   var region = "";
@@ -18,21 +21,23 @@ function createAndroidResources(language, data, folder, column) {
   
   for (var i = ROW_START_INDEX; i < data.length; i++) {
     var key = data[i][COL_FLUTTER_KEY];
+    
+    // detect comment tag
     if (key.indexOf('<') == 0) {
-      // 区切り位置埋め込むregionタグを一旦保持します
+      // save comment tag while prove this region contains contents.
       region = key.slice(1, key.length - 1);
       continue;
     }
 
-    // AndroidKeyが空欄の場合はスキップ    
+    // skip if AndroidKey is empty
     if (data[i][COL_ANDOID_KEY].length == 0) {
       continue;
     }
     
-    // stringsの先頭ブロックにregionタグをコメントとして埋め込みます
+    // insert comment
     if (region.length != 0) {
       content += "\n\n\t<!-- " + region + " -->";
-      region = "";// regionタグのクリア
+      region = "";  // clear
     }
     
     // string value
