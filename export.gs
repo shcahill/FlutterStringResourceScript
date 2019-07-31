@@ -8,7 +8,7 @@ var COL_ANDOID_KEY = 1;    // resource key for Android
 var COL_IOS_KEY = 2;       // resource key for iOS
 var COL_PRIMARY_LANG = 4;  // 
 
-// メニュー
+// menu
 var ALL = "All";
 var ANDROID = "Android";
 var FLUTTER = "FLUTTER";
@@ -54,13 +54,13 @@ function exportResources(platform) {
     } else {
       if (i == COL_PRIMARY_LANG) {
         // primary-language
-        var primaryFiles = createFlutterPrimaryResources(data, folder, i);
+        var primaryFiles = createFlutterPrimaryResources(data, i, folder);
         for (var f = 0; f < primaryFiles.length; f++) {
           files.push(primaryFiles[f]);
         }
       } else {
         // other language
-        files.push(createFlutterResources(lang, data, folder, i));
+        files.push(createFlutterResources(lang, data, i, folder));
       }
     }
   }

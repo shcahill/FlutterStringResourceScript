@@ -1,10 +1,12 @@
+// Extract tags from string
+// tag: String enclosed in '{}' parentheses
 function getTags(str) {
-  // FIXME: 先頭の{を削れない…
   var tags = str.match( /\{.*?(?=\})/g );
   if (tags == null) {
     return null;
   }
   for (var i = 0; i < tags.length; i++) {
+    // FIXME: I cannot remove first `{`
     tags[i] = tags[i].replace('{', '');
   }
   return tags;
