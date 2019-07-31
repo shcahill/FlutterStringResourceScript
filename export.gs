@@ -15,21 +15,21 @@ var FLUTTER = "FLUTTER";
 var IOS = "iOS";
 
 function exportAllResources() {
-  exportResources(FLUTTER);
+  exportResources(FLUTTER); 
   exportResources(ANDROID);
-  exportResources(IOS);
+  exportResources(IOS);  
 }
 
 function exportFlutterResources() {
-  exportResources(FLUTTER);
+  exportResources(FLUTTER);  
 }
 
 function exportAndroidResources() {
-  exportResources(ANDROID);
+  exportResources(ANDROID);  
 }
 
 function exportIOSResources() {
-  exportResources(IOS);
+  exportResources(IOS);  
 }
 
 function exportResources(platform) {
@@ -37,12 +37,13 @@ function exportResources(platform) {
   // Data
   var sheet = SpreadsheetApp.getActiveSheet();
   var data = sheet.getDataRange().getValues();
-
+  
   // Folders
   var appFolder = createOrGetFolder(sheet.getName()); // シート名のフォルダ
   var folderName = platform;
   var folder = createOrGetFolder(folderName, appFolder);
 
+  var files = [];
   var length = data[ROW_LANG_INDEX].length;
   for (var i = 3; i < length; i++) {
     var lang = data[ROW_LANG_INDEX][i];
@@ -53,20 +54,24 @@ function exportResources(platform) {
     } else {
       if (i == COL_PRIMARY_LANG) {
         // primary言語の出力
-        createFlutterPrimaryResources(data, folder, i)
+        var primaryFiles = createFlutterPrimaryResources(data, folder, i);
+        for (var f=0; f<primaryFiles.length; f++) {
+          files.push(primaryFiles[f]);
+        }
       } else {
         // その他の言語の出力
-        createFlutterResources(lang, data, folder, i)
+        files.push(createFlutterResources(lang, data, folder, i));
       }
     }
   }
-
+  
   if (platform == ANDROID) {
     showAndroidExportFinishedMessage();
   } else if(platform == IOS) {
     showIOSExportFinishedMessage();
   } else {
-    showFlutterExportFinishedMessage();
+    var zip = createZip(files, folder);
+    downloadWithHtml(zip.getId());
   }
 }
 

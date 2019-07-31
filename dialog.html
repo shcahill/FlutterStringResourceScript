@@ -1,35 +1,6 @@
 <!DOCTYPE html>
 <html>
   <body>
-    <script>
-  window.onload = function(){
-    download();
-  }
-  
-  function download() {
-    google.script.run
-      .withFailureHandler(onFailure)
-      .withSuccessHandler(onSuccess)
-      .getFileDownloadInfo({fileIdList});
-  }
-
-  function onSuccess(array) {
-    for (var i=0; i<array.length; i++) {
-      var data = array[i][0];
-      var file_name = array[i][1];
-      var blob = new Blob([data], {"type":"text/plain"});
-      var link = document.createElement("a");
-      link.download = file_name;
-      link.href = window.URL.createObjectURL(blob);
-      link.click();
-    }
-    // ダイアログを閉じる
-    google.script.host.close();
-  }
-  
-  function onFailure(e) {
-    alert([e.message, e.stack]);
-  }
-    </script>
+  <a href="{link}">Flutter Resource Download : {fileName}</a>
   </body>
 </html>
