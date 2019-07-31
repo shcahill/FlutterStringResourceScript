@@ -1,13 +1,17 @@
 // create zip from fileIdList
-function createZip(fileIdList, folder) {
+function createZip(fileIdList, folder, platform) {
   var blobs = [];
   for (var i=0; i<fileIdList.length; i++) {
     var file = DriveApp.getFileById(fileIdList[i]);
     var blob = file.getBlob();
+    var parentName = file.getParents().next().getName();
+    if (platform == ANDROID) {
+      blob.setName(parentName + "/" + blob.getName());
+    }
     blobs.push(blob);
   }
-
-  var zip = Utilities.zip(blobs, "flutterResources.zip");
+      
+  var zip = Utilities.zip(blobs, platform + ".zip");
   var zipFile = folder.createFile(zip);
   return zipFile;
 }

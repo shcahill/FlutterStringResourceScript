@@ -48,7 +48,7 @@ function exportResources(platform) {
   for (var i = 3; i < langNum; i++) {
     var lang = data[ROW_LANG_INDEX][i];
     if(platform == ANDROID) {
-      createAndroidResources(lang, data, folder, i);
+      files.push(createAndroidResources(lang, data, folder, i));
     } else if(platform == IOS) {
       createIOSResources(lang, data, folder, i);
     } else {
@@ -65,7 +65,7 @@ function exportResources(platform) {
     }
   }
 
-  var zip = createZip(files, folder);
+  var zip = createZip(files, folder, platform);
   downloadWithHtml(zip.getId());  
 }
 
