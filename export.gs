@@ -6,7 +6,7 @@ var ROW_START_INDEX = 3; // start index of Strings
 var COL_FLUTTER_KEY = 0;   // resource key for Flutter
 var COL_ANDOID_KEY = 1;    // resource key for Android
 var COL_IOS_KEY = 2;       // resource key for iOS
-var COL_PRIMARY_LANG = 4;  // 
+var COL_PRIMARY_LANG = 4;  //
 
 // menu
 var ALL = "All";
@@ -15,21 +15,25 @@ var FLUTTER = "FLUTTER";
 var IOS = "iOS";
 
 function exportAllResources() {
-  exportResources(FLUTTER); 
-  exportResources(ANDROID);
-  exportResources(IOS);  
+  var flutterZip = exportResources(FLUTTER);
+  var androidZip = exportResources(ANDROID);
+  var iosZip = exportResources(IOS);
+  downloadWithHtml(flutterZip, androidZip, iosZip);
 }
 
 function exportFlutterResources() {
-  exportResources(FLUTTER);  
+  var flutterZip = exportResources(FLUTTER);
+  downloadWithHtml(flutterZip, undefined, undefined);
 }
 
 function exportAndroidResources() {
-  exportResources(ANDROID);  
+  var androidZip = exportResources(ANDROID);
+  downloadWithHtml(undefined, androidZip, undefined);
 }
 
 function exportIOSResources() {
-  exportResources(IOS);  
+  var iosZip = exportResources(IOS);
+  downloadWithHtml(undefined, undefined, iosZip);
 }
 
 function exportResources(platform) {
@@ -37,7 +41,7 @@ function exportResources(platform) {
   // Data
   var sheet = SpreadsheetApp.getActiveSheet();
   var data = sheet.getDataRange().getValues();
-  
+
   // Folders
   var appFolder = createOrGetFolder(sheet.getName()); // create root-Folder named by sheet's name
   var folderName = platform;
@@ -66,8 +70,7 @@ function exportResources(platform) {
     }
   }
 
-  var zip = createZip(files, folder, platform);
-  downloadWithHtml(zip.getId());  
+  return createZip(files, folder, platform).getId();
 }
 
 function convertEscapeCharacter(string) {
@@ -78,4 +81,3 @@ function convertEscapeCharacter(string) {
   .replace(new RegExp(">", 'g'), "&gt;")
   .replace(new RegExp("<", 'g'), "&lt;");
 }
-
